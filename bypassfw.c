@@ -86,7 +86,7 @@ main(int argc, char **argv)
 
         /* Grab the device for pcapping */
         bzero(errbuf, sizeof(errbuf));
-        if (NULL == (p = pcap_open_live(argv[2], SNAPLEN, 0, 10, errbuf)))
+        if (NULL == (p = pcap_open_live(argv[2], SNAPLEN, 1, 10, errbuf)))
                 errx(2, "pcap_open_live: %s", errbuf);
         if (0 != unveil("/dev/bpf", ""))
                 err(22, "unveil");
@@ -104,13 +104,13 @@ main(int argc, char **argv)
 	if (setresuid(pw->pw_uid, pw->pw_uid, pw->pw_uid) == -1)
 		err(1, "setresuid() failed");
 
-	/* Have to call pledge(3) after pcap_setfilter :( */
-        if (0 != pledge("stdio", ""))
-                err(16, "pledge");
-
         /* Set the filter if we have one */
         if (4 == argc)
                 set_filter(p, argv[3], argv[2]);
+
+	/* Have to call pledge(3) after pcap_setfilter :( */
+        if (0 != pledge("stdio", ""))
+                err(16, "pledge");
 
         /* Start reading from the device and injecting to the network */
         inj.p   = p;
