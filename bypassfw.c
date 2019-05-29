@@ -44,6 +44,7 @@ main(int argc, char **argv)
         int tfd;
         pcap_t *p;
         char errbuf[PCAP_ERRBUF_SIZE+1];
+        pthread_attr_t attr;
         pthread_t tid;
         struct injector inj;
         char *rp, *ch;
@@ -115,6 +116,10 @@ main(int argc, char **argv)
         /* Start reading from the device and injecting to the network */
         inj.p   = p;
         inj.tfd = tfd;
+        if (-1 == pthread_attr_init(&attr))
+                err(1, "pthread_attr_init");
+        if (-1 == pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED))
+                err(1, "pthread_attr_setdetachstate");
         if (0 != pthread_create(&tid, NULL, inject, &inj))
                 err(6, "pthread_create");
 
