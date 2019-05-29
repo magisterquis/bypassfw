@@ -120,7 +120,7 @@ main(int argc, char **argv)
                 err(1, "pthread_attr_init");
         if (-1 == pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED))
                 err(1, "pthread_attr_setdetachstate");
-        if (0 != pthread_create(&tid, NULL, inject, &inj))
+        if (0 != pthread_create(&tid, &attr, inject, &inj))
                 err(6, "pthread_create");
 
         /* Sniff frames and send them to the kernel */
