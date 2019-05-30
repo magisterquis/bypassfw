@@ -50,9 +50,6 @@ main(int argc, char **argv)
         char *rp, *ch;
         struct passwd *pw;
 
-        /* TODO: Pledge */
-        /* TODO: Unveil */
-
         /* Get nobody's info */
 	if (NULL == (pw = getpwnam(UNPRIVUSER)))
 		err(19, "getpwnam");
