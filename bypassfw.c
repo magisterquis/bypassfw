@@ -84,7 +84,7 @@ main(int argc, char **argv)
 
         /* Grab the device for pcapping */
         bzero(errbuf, sizeof(errbuf));
-        if (NULL == (p = pcap_open_live(argv[2], SNAPLEN, 1, 10, errbuf)))
+        if (NULL == (p = pcap_open_live(argv[2], SNAPLEN, 0, 10, errbuf)))
                 errx(2, "pcap_open_live: %s", errbuf);
         if (0 != unveil("/dev/bpf", ""))
                 err(22, "unveil");
